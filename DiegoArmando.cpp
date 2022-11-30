@@ -60,8 +60,8 @@ void printQuote(string quote)
 
   quote = wrapText(quote, 35);
   //42 -'s
-  cout << ANSI_BLUE << R"( _______
-|Godot: |
+  cout << ANSI_BLUE << R"( _____)" << endl <<
+"|" << ANSI_RESET << "Godot" << ANSI_BLUE << R"(|
 |-------------------------------------------|)" << endl << "|";
 
   int count = 0;
