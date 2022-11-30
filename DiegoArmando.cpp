@@ -14,22 +14,22 @@ Then, it displays an image of Godot.
 
 using namespace std;
 
-const string GODOT_IMAGE = "godot-utf.txt"; //set this to the file containing the utf image of godot (basically ascii art kind of)
-const string GODOT_QUOTES = "godot.txt"; //set this to the file of godot quotes. Format should be one quote per line. No whitespace.
+const string GODOT_IMAGE = "./godot-utf.txt"; //set this to the file containing the utf image of godot (basically ascii art kind of)
+const string GODOT_QUOTES = "./godot.txt"; //set this to the file of godot quotes. Format should be one quote per line. No whitespace.
 
 void sipCoffee(); //animation of Godot sipping coffee
+void printQuote(string);
 string getQuote(); //gets a quote from the file that holds the Godot quotes, and returns it as a string
+string wrapText(string, int);
+void clear(); //clear the terminal
 
 int main()
 {
-  string godotSays = "error: 19"; //error line 19 (this line lol)
-
-  godotSays = getQuote(); //gets a quote from the database of quotes
-
-  cout << godotSays << endl; //print the quote from Godot
+  clear();
 
   sipCoffee(); //Godot sips some coffee.
 
+  printQuote(getQuote()); //prints the new quote to the screen
   return 0;
 }
 
@@ -43,9 +43,52 @@ void sipCoffee()
     cout << t << endl;
   };
   infile.close();
-  cout << endl;
 }
 
+//prints the godot quote, wrapped in a cute text box, to the console.
+//string quote is the randomized quote from the other random quote function
+void printQuote(string quote)
+{
+
+  quote = wrapText(quote, 35);
+  //42 -'s
+  cout << R"(|-------------------------------------------|
+|Godot:                                     |)" << endl << "|";
+
+  int count = 0;
+  for(int i = 0; i < quote.length(); i++){
+    if (quote.at(i) == '\n'){
+      for(int j = 0; j <= 42-count; j++)
+        cout << " ";
+      cout << "|" << quote.at(i) << "|";
+      count = 0;
+    }else{
+      cout << quote.at(i);
+      count++;
+    }
+  }
+  for(int i = 0; i <= 42-count; i++){
+    cout << " ";
+  }
+  cout << "|" << endl <<
+  R"(|-------------------------------------------|)" << endl;
+}
+
+//wraps the text by replacing a space with a newline char
+string wrapText(string text, int loc)
+{
+  if(loc > text.length()){
+    return text; //dont do anything
+  }
+  for(int i = loc; i < text.length(); i++){
+    if ((i % loc == 0)){
+      int spaceLoc = text.rfind(' ', i);
+      text.at(spaceLoc) = '\n';
+    }
+  }
+
+  return text;
+}
 //returns a string that is a randomized quote from the file godot.txt
 string getQuote()
 {
@@ -100,5 +143,11 @@ string getQuote()
   infile.close(); //close the file
 
   return theQuote;
+}
+
+void clear()
+{
+  // CSI[2J clears screen, CSI[H moves the cursor to top-left corner
+  std::cout << "\x1B[2J\x1B[H";
 }
 
