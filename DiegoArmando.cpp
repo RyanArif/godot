@@ -11,6 +11,7 @@ Then, it displays an image of Godot.
 #include<string> //strings
 #include<fstream> //read in from the long list of godot quotes
 #include<random> //for randomizing the quote
+#include<filesystem> //to get the path to the executable and the resources
 
 using namespace std;
 
@@ -25,7 +26,12 @@ void clear(); //clear the terminal
 
 int main()
 {
-  clear();
+  //only works on Linux as far as I can see!
+  //Gets the current working directory of the executable
+  //this way, the program always has the Godot sippy sprite and the quotes list!
+  filesystem::path exepath = filesystem::canonical("/proc/self/exe");
+  exepath.remove_filename();
+  filesystem::current_path(exepath);
 
   sipCoffee(); //Godot sips some coffee.
 
