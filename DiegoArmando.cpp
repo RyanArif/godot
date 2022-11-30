@@ -55,11 +55,14 @@ void sipCoffee()
 //string quote is the randomized quote from the other random quote function
 void printQuote(string quote)
 {
+  const string ANSI_BLUE = "\u001B[34m";
+  const string ANSI_RESET = "\u001B[0m";
 
   quote = wrapText(quote, 35);
   //42 -'s
-  cout << R"(|-------------------------------------------|
-|Godot:                                     |)" << endl << "|";
+  cout << ANSI_BLUE << R"( _______
+|Godot: |
+|-------------------------------------------|)" << endl << "|";
 
   int count = 0;
   for(int i = 0; i < quote.length(); i++){
@@ -69,7 +72,7 @@ void printQuote(string quote)
       cout << "|" << quote.at(i) << "|";
       count = 0;
     }else{
-      cout << quote.at(i);
+      cout << ANSI_RESET << quote.at(i) << ANSI_BLUE;
       count++;
     }
   }
@@ -77,7 +80,7 @@ void printQuote(string quote)
     cout << " ";
   }
   cout << "|" << endl <<
-  R"(|-------------------------------------------|)" << endl;
+  R"(|-------------------------------------------|)" << endl << ANSI_RESET;
 }
 
 //wraps the text by replacing a space with a newline char
