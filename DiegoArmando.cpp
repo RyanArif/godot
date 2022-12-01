@@ -24,8 +24,18 @@ string getQuote(); //gets a quote from the file that holds the Godot quotes, and
 string wrapText(string, int);
 void clear(); //clear the terminal
 
-int main()
+int main(int argc, char** argv)
 {
+  //handle command line args
+  bool quiet = false;
+  for(int i = 0; i < argc; i++){
+    string arg = argv[i];
+    //if(argv[i] == "-q") //doesn't work, I think it might have something to do with the whole char to string thing maybe? I don't really know.
+    if (arg == "-q" || arg == "--quiet"){ //don't output anything
+      quiet = true;
+    }
+  }
+
   //only works on Linux as far as I can see!
   //Gets the current working directory of the executable
   //this way, the program always has the Godot sippy sprite and the quotes list!
@@ -33,9 +43,19 @@ int main()
   exepath.remove_filename();
   filesystem::current_path(exepath);
 
-  sipCoffee(); //Godot sips some coffee.
+  //get the quote
+  string godotQuote = "ERROR: failed ot get quote";
+  godotQuote = getQuote();
 
-  printQuote(getQuote()); //prints the new quote to the screen
+  //only output the quote, nothing else.
+  if(quiet){
+    cout << godotQuote << endl;
+    return 0;
+  }
+
+  //output to the terminal
+  sipCoffee(); //Godot sips some coffee.
+  printQuote(godotQuote); //prints the new quote to the screen
   return 0;
 }
 
